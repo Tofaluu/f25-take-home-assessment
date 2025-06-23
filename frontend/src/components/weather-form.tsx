@@ -47,13 +47,13 @@ function isValidDate(date: Date | undefined): boolean {
 export function WeatherForm() {
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    new Date(),
+    new Date()
   );
   const [calendarMonth, setCalendarMonth] = useState<Date | undefined>(
-    new Date(),
+    new Date()
   );
   const [displayValue, setDisplayValue] = useState(
-    formatDateForDisplay(new Date()),
+    formatDateForDisplay(new Date())
   );
 
   const [formData, setFormData] = useState<WeatherFormData>({
@@ -80,7 +80,7 @@ export function WeatherForm() {
   };
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -249,12 +249,31 @@ export function WeatherForm() {
             >
               <p className="text-sm font-medium">{result.message}</p>
               {result.success && result.id && (
-                <p className="text-xs mt-1">
-                  Your weather request ID:{" "}
-                  <code className="bg-green-500/20 text-green-400 px-1 rounded">
+                <div className="text-xs mt-1 flex items-center gap-2 flex-wrap">
+                  <span>Your weather request ID:</span>
+                  <code className="bg-green-500/20 text-green-400 px-1 py-0.5 rounded font-mono">
                     {result.id}
                   </code>
-                </p>
+                  <Button
+                    type="button"
+                    variant="outline" // adds a border
+                    size="sm"
+                    onClick={async () => {
+                      await navigator.clipboard.writeText(result.id!);
+                      setResult((prev) =>
+                        prev
+                          ? {
+                              ...prev,
+                              message: "Copied to clipboard!",
+                              id: prev.id,
+                            }
+                          : prev
+                      );
+                    }}
+                  >
+                    Copy
+                  </Button>
+                </div>
               )}
             </div>
           )}
