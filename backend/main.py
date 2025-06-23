@@ -6,6 +6,9 @@ import uvicorn
 import uuid
 import os
 import httpx
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI(title="Weather Data System", version="1.0.0")
 
@@ -28,7 +31,7 @@ class WeatherRequest(BaseModel):
 class WeatherResponse(BaseModel):
     id: str
 
-WEATHERSTACK_API_KEY = "REMOVED"
+WEATHERSTACK_API_KEY = os.getenv("WEATHERSTACK_API_KEY")
 
 @app.post("/weather", response_model=WeatherResponse)
 async def create_weather_request(request: WeatherRequest):
